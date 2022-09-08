@@ -42,8 +42,8 @@ def stop_server (sock):
 # takes a string input and creates a specific string returnable only 
 # by this algorithm using the hashing library
 def checksum (checkmsg):
-  print "This is the word the check sum sees" #this is being used to prevent 
-  print checkmsg #any errors and make sure the checksum sees the right string
+  print ("This is the word the check sum sees") #this is being used to prevent 
+  print (checkmsg) #any errors and make sure the checksum sees the right string
   hash_md5 = hashlib.md5()
   hash_md5.update(checkmsg.encode('utf-8'))
   print(hash_md5.hexdigest())
@@ -59,17 +59,17 @@ IMQ = []
 # CONTRACT
 def handle_message (msg):
   clientmsg = msg.split(" ")[:-1]
-  print "this is the client msg" #these two lines are used to identify what the
-  print clientmsg  #user wants to have sent to the server
+  print ("this is the client msg") #these two lines are used to identify what the
+  print (clientmsg)  #user wants to have sent to the server
   checksumclient = (msg.split(" ")[-1]) #this seperates the checksum the client
-  print "this is the check sum they sent" #sent to the server and prints it out
-  print checksumclient # the print is only here to help with errors
+  print ("this is the check sum they sent") #sent to the server and prints it out
+  print (checksumclient) # the print is only here to help with errors
   clientjoin = " ".join(clientmsg) #after making the string into a list we combine it together
   msgchecksum = checksum(clientjoin) #perform the checksum on the msg
-  print "this is the check sum we get" #these two lines print the checksum we got
-  print msgchecksum
+  print ("this is the check sum we get") #these two lines print the checksum we got
+  print (msgchecksum)
   if msgchecksum == checksumclient: #checks to see if the checksums match before
-    print "WOOHOO"                  #proceeding with the handle msg
+    print ("WOOHOO")                  #proceeding with the handle msg
     msg = clientjoin #msg was the original string used for the rest of the code
 # it seemed easier to set it equal to clientjoin(same without the checksum)
 # than to change every instance of msg to clientjoin

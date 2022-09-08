@@ -30,21 +30,21 @@ def receive_message (sock):
 # takes a string input and creates a specific string returnable only 
 # by this algorithm using the hashing library
 def checksum (checkmsg):
-  print "this is what the checksum sees" #this is used to see what our checksum
-  print checkmsg #sees, this is used to help with errors
+  print ("this is what the checksum sees") #this is used to see what our checksum
+  print (checkmsg) #sees, this is used to help with errors
   hash_md5 = hashlib.md5()
   hash_md5.update(checkmsg.encode('utf-8'))
-  print "this is what we get for the checksum"
+  print ("this is what we get for the checksum")
   print(hash_md5.hexdigest())
   return hash_md5.hexdigest()
 def send (msg):
   global last
   last = msg #this saves the msg before it is sent
-  print "this is the msg we are sending" #these two lines are used to help with 
-  print msg                              #errors
+  print ("this is the msg we are sending") #these two lines are used to help with 
+  print (msg)                         #errors
   clientsums = (str(checksum(msg)))#this performs a checksum on the msg
-  print "this is the checksum we get for the msg"
-  print clientsums #we print it out to make sure we know//for errors
+  print ("this is the checksum we get for the msg")
+  print (clientsums) #we print it out to make sure we know//for errors
   msg += " " #we add a space and the checksum to the msg before sending
   msg += clientsums
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -56,36 +56,36 @@ def send (msg):
 def recv (sock):
   response = receive_message(sock)
   servermsg = response.split(" ")[:-1] #we use this to grab the msg the server
-  print "this is the servers message" #sent back and then print it out
-  print servermsg
+  print ("this is the servers message") #sent back and then print it out
+  print (servermsg)
   checksumserver = (response.split(" ")[-1]) #we grab the checksum that the server
-  print "this is the check sum they sent" #caculated and print it out
-  print checksumserver
+  print ("this is the check sum they sent") #caculated and print it out
+  print (checksumserver)
   serverjoin = " ".join(servermsg) # we combine the msg back together
   msgchecksum = checksum(serverjoin)# then perform a checksum on the msg
-  print "this is teh check sum we get" # and print out what it returns
-  print msgchecksum
+  print ("this is teh check sum we get") # and print out what it returns
+  print (msgchecksum)
   if msgchecksum == checksumserver: # we check to make sure the checksums match
-    print "Checksum pass" #we explain that the checksum passed
+    print ("Checksum pass") #we explain that the checksum passed
     if servermsg[0] == "RETRY": #if they do we check to see if they wanted us to
       sock.close()
       return "RETRY" #resend our last msg, if so we return retry
     sock.close()
     return True #if everything worked out well we return True
   else:
-    print "checksum fail resending" #if the checksum check failed we want to 
+    print ("checksum fail resending") #if the checksum check failed we want to 
     sock.close()                    #return false
     return False
 def send_recv (msg):
   statement = recv(send(msg))# we call our operations and get a response from recv
-  print "this is the last msg the client has saved"#printing last for error reasons
-  print last
+  print ("this is the last msg the client has saved")#printing last for error reasons
+  print (last)
   if statement == True: #if it is true there is no apparent errors
         pass# things have went well, just keep going
   elif statement == "RETRY":#if we get retry, the server didn't like our msg
         send_recv(last) #in this case we now retry to send the last msg
   else:
-        print msg #if it returns false/anything else, we ask them to RESEND
+        print (msg) #if it returns false/anything else, we ask them to RESEND
         username = msg.split(" ")[1]
         resendmsg = "RESEND" + " " + username
         send_recv(resendmsg)
